@@ -1,0 +1,184 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 3                     %
+% 2/18/2020                 %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+
+%Info for Title Page
+\title{ECE 351 Lab 3 Report \\ Section 52}
+\date{February 28, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+%Introduction
+\section*{Introduction}
+
+The purpose of this lab is to become familiar with convolutions and its properties. To do that we will use the Python programming language. 
+
+%Equations
+\section*{Equations}
+
+\begin{equation}
+    f_1t = u(t-2) - u(t-9)
+\end{equation}
+\begin{equation}
+    f_2t = e^{-t} * u(t)
+\end{equation}
+\begin{equation}
+    f_3t = r(t-2)[u(t-2) - u(t-3)] + r(4-t)[u(t-3) - u(t-4)]
+\end{equation}
+
+
+
+%Methodology
+\section*{Methodology}
+
+\begin{enumerate}
+    \item The first thing  I did was to bring over my ramp and step function code from the previous lab 2.
+    \item I then test the lab 2 code with the new functions given in this lab 3.
+    \item Once that was done it was time to write the convolution code.
+    \item The code below is what we came up with together as a class.
+\end{enumerate}
+
+
+\begin{lstlisting}
+// Task 1 Code
+#############################################################
+#Section 4.1, 4.2, 4.3
+
+def convo(t1,t2):
+    
+    t1_len = len(t1)
+    t2_len = len(t2)
+    
+    Et1 = np.append(t1,np.zeros((1,t2_len - 1))) # extend the first function
+    Et2 = np.append(t2,np.zeros((1,t1_len - 1)))# extend the first function
+    
+    res = np.zeros(Et1.shape) # works when we start at zero
+    
+    for i in range((t1_len + t2_len) - 2 ): # First Loop
+        res[i] = 0
+        
+        for j in range(t1_len): # Second Loop
+            if(i-j+1  > 0):
+                try: 
+                    res[i] += (Et1[i] * Et2[i-j+1])
+                except:
+                    print(i,j)
+            
+    return res
+
+\end{lstlisting}
+
+
+%Results
+\section*{Results}
+
+
+\begin{figure}[H]
+\caption{User Defined Functions}
+\centering
+\includegraphics[width=.8\textwidth]{User_Defined_Functions.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Check with sig.convo}
+\centering
+\includegraphics[width=.8\textwidth]{check_with_sig_convo.png}
+\end{figure}
+
+
+
+%Questions
+\section*{Questions}
+
+\begin{enumerate}
+    \item Did you work alone or with classmates on this lab? If you collaborated to get to the solution,
+what did that process look like?
+    \begin{enumerate}
+        \item For this lab I worked with my classmates.  In order to get to the solution we had to think outside the box a bit. We broke down what convolution is into small parts that a computer can calculate. Then the pieces were put together and we prayed to the Python gods that it would work. Unfortunately it didn't work but we were close.
+    \end{enumerate}
+    \item What was the most difficult part of this lab for you, and what did your problem-solving
+process look like?
+    \begin{enumerate}
+        \item The most difficult thing for me was taking a concept we know like convolution and translating that into code. To make this easier I broke down the idea of convolution into smaller pieces and then coded up the small pieces. For example I know that the duration of convolving two equations is the sum of their total times. In coding this is represented by arrays that need to be extended and have the same sizes.
+    \end{enumerate}
+    \item Did you approach writing the code with analytical or graphical convolution in mind? Why
+did you chose this approach?
+    \begin{enumerate}
+        \item I approached writing this code with graphical convolution in mind. I did this because I like to picture what the code is supposed to do and then code it up. I find that easier than an analytical approach.
+    \end{enumerate}
+    \item Leave any feedback on the clarity of lab tasks, expectations, and deliverables
+    \begin{enumerate}
+        \item N/A
+    \end{enumerate}
+\end{enumerate}
+
+%Conclusion
+\section*{Conclusion}
+
+Convolution is a complex thing to wrap our minds around. Luckily we have machines that can do complex convolutions for us. The only catch is we have to capture our ideas as code for the machines. In the end why do convolutions by hand when a computer can do it for us?
+
+
+\end{document}
