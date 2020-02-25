@@ -1,0 +1,153 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 4                     %
+% 2/25/2020                 %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+
+%Info for Title Page
+\title{ECE 351 Lab 4 Report \\ Section 52}
+\date{February 25, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+%Introduction
+\section*{Introduction}
+
+The purpose of this lab is to become more familiar using convolution to calculate a systems impulse response.
+
+%Equations
+\section*{Equations}
+
+User Defined Functions: Where \[ f_{0} = 0 \]
+\begin{equation}
+    h_1(t) = e^{2t}*u(1-t)
+\end{equation}{}
+\begin{equation}
+    h_2(t) = u(t-2) - u(t-6)
+\end{equation}
+\begin{equation}
+    h_3(t) = cos(w_0t)*u(t)
+\end{equation}
+
+Hand Calculations:
+
+\begin{equation}
+    h_1(t)**u(t) = 0.5e^{2t}*u(1-t) + 0.5e^{2}*u(t-1) 
+\end{equation}
+\begin{equation}
+    h_2(t)**u(t) = (r(t-2) - r(t-6))*u(t)
+\end{equation}
+\begin{equation}
+    h_3(t)**u(t) = (1/w_0) * sin(w_0*t)*u(t)
+\end{equation}
+
+
+%Methodology
+\section*{Methodology}
+
+\begin{enumerate}
+    \item First I imported code from Lab 3. I imported in the ramp,step, and convolution functions.
+    \item I did all the required plots.
+    \item Next, I did the convolutions by hand. 
+    \item Then plot and compare the hand calculations with the computers results.
+    \item Tweak the plots to show the functions properly.
+\end{enumerate}
+
+%Results
+\section*{Results}
+
+\begin{figure}[H]
+\caption{User Defined Functions}
+\centering
+\includegraphics[width=.8\textwidth]{User_Defined_Functions.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Check with sig.convo}
+\centering
+\includegraphics[width=.8\textwidth]{check_with_sig_convolve.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Hand Calc Convolution}
+\centering
+\includegraphics[width=.8\textwidth]{hand_calc.png}
+\end{figure}
+
+%Questions
+\section*{Questions}
+
+\begin{enumerate}
+    \item 1. Leave any feedback on the clarity of lab tasks, expectations, and deliverables.
+    \begin{enumerate}
+        \item Not much to say. This lab was pretty straight forward.
+    \end{enumerate}
+\end{enumerate}
+
+%Conclusion
+\section*{Conclusion}
+
+In general this wasn't a bad lab. Some take aways are I am still not good at convolutions by hand. I should spend some more time on them. Also, when plugging in the hand calculation equations it's normal for them not to go down back to 0.
+
+\end{document}
