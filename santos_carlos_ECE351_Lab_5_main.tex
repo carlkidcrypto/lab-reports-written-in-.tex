@@ -1,0 +1,201 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 5                     %
+% 03/3/2020                 %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+
+%Info for Title Page
+\title{ECE 351 Lab 4 Report \\ Section 52}
+\date{March 3, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+%Introduction
+\section*{Introduction}
+
+This lab was focused on being able to program the "Sine Method" taught by Dr. Sullivan.
+It was also focused on using built in functions to check our work.
+
+%Equations
+\section*{Equations}
+
+Transfer Function for the RLC circuit:
+\begin{equation}
+    H(S) = \frac{(s/RC)}{(S^2 + S/RC + 1/LC)}
+\end{equation}
+
+Equations for the  Sine  Method:
+\begin{equation}
+    s = \frac{-b+\sqrt{b^2 - 4ac}}{2a}
+\end{equation}
+
+\begin{equation}
+    p = \alpha + j\omega
+\end{equation}
+
+\begin{equation}
+    g = \frac{1}{RC} * s 
+\end{equation}
+where s = p
+
+\begin{equation}
+    |g| = \sqrt{\alpha ^ 2 + \beta ^ 2}
+\end{equation}
+
+\begin{equation}
+    <g = tan^-1 (\frac{\beta}{\alpha})
+\end{equation}
+
+Final Value Theorem:
+\begin{equation}
+    \lim_{t\to\infty} f(t) \xrightarrow{} \lim_{s\to 0}sF(S)
+\end{equation}
+
+\begin{equation}
+    \lim_{s\to\infty} sF(s) = \lim_{s\to 0} \frac{\frac{1}{RC}}{s^2 + \frac{1}{RC}s + \frac{1}{LC}} = 0
+\end{equation}
+
+
+%Methodology
+\section*{Methodology}
+ \begin{enumerate}
+     \item Find the H(s) equation for the RLC circuit given in the prelab handout.
+     \item Find "Sine Method" equations
+     \begin{enumerate}
+         \item Next, translate that into code.
+         \item The code looks like this:
+        \\ \begin{lstlisting}
+    def sine_method(R,L,C,t):
+    y = np.zeros(t.shape) #t.shape of whatever is inputted in
+    alpha = -1/(2*R*C)
+    omega = 0.5*np.sqrt(1/(R*C))**2 - 4*(1/(np.sqrt(L*C)))**2 + (0 * 1j)
+    p = alpha + omega
+    g = 1/(R*C)*p
+    g_mag = np.abs(g)
+    g_rad = np.angle(g)
+    g_deg = g_rad*(180/np.pi)
+    y = ((g_mag/np.abs(omega))*np.exp(alpha*t) 
+        *np.sin(np.abs(omega)*t + g_rad))*u(t)
+    return y
+        \end{lstlisting}
+    \item Next, graph the h(t) function.
+    \item Now, using the sig.impulse graph the impulse response
+    \item Again, use the sig.step to graph the step response.
+    \item Verify plots with the "Final Value Theorem".
+     \end{enumerate}
+ \end{enumerate}
+
+%Results
+\section*{Results}
+
+\begin{figure}[H]
+\caption{RCL Transfer Equation}
+\centering
+\includegraphics[width=.8\textwidth]{h_t.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Impulse Response}
+\centering
+\includegraphics[width=.8\textwidth]{sig_impulse.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Step Response}
+\centering
+\includegraphics[width=.8\textwidth]{sig_step.png}
+\end{figure}
+
+\\
+During this lab I found out that it was hard to input the whole sine method at once.
+Instead the best solution is to break it up into parts and let python do the work for me.
+Also, the "Final Value Theorem" results in "0" as the solution which matches the graphs.
+\\
+For future reference the code below is how we can declare our transfer function in python. From my understanding we allocate two vectors. One for the numerator and anther for the denominator. num = [s,1] den = [$s^2$,s,1]
+
+\begin{lstlisting}
+num = [1/(R*C),0] # numerator
+den = [1,1/(R*C),(1/np.sqrt(L*C))**2] # denomerator
+\end{lstlisting}
+
+
+%Questions
+\section*{Questions}
+\begin{enumerate}
+    \item Explain the result of the Final Value Theorem from Part 2 Task 2 in terms of the physical
+circuit components.
+    \begin{enumerate}
+        \item In terms of hardware the Final Value Theorem shows what the final state of a group of components will be. Looking at our circuit we know the capacitor charges up and then discharges. The inductor then charges up and discharges. The Final Value Theorem shows that eventually the system will loose all energy through the resister and be "off".
+    \end{enumerate}
+    \item Leave any feedback on the clarity of the expectations, instructions, and deliverables.
+    \begin{enumerate}
+        \item Not much to say, the lab was straight forward.
+    \end{enumerate}
+\end{enumerate}
+
+%Conclusion
+\section*{Conclusion}
+
+
+\end{document}
