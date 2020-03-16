@@ -1,0 +1,190 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 5                     %
+% 03/10/2020                 %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+
+%Info for Title Page
+\title{ECE 351 Lab 6 Report \\ Section 52}
+\date{March 10, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+%Introduction
+\section*{Introduction}
+
+This purpose of this lab was to use the "scipy.signal.residue function to do partial fraction decomposition.
+Along with that to create a cosine function to help us graph functions.
+
+%Equations
+\section*{Equations}
+
+Transfer Function Pre-Lab:
+
+\begin{equation}
+   H(t) =  \frac{s^2 + 6s + 12}{ s^2 + 10s + 24}
+\end{equation}
+
+\begin{equation}
+    H_{step-response}(t) = \frac{1}{s} * \frac{s^2 + 6s + 12}{ s^2 + 10s + 24}
+\end{equation}
+Task 4.3 Equations:
+
+\begin{equation}
+    y^{(5)}(t) + 18y^{(4)}(t) + 218y^{(3)}(t) + 2036y^{(2)}(t) + 9085y^{(1)}(t) + 25250y(t) = 25250 x(t)
+\end{equation}
+
+\begin{equation}
+    H(t) = \frac{25250}{s^5 + 118s^4 + 218s^3 + 2036s^2 + 9085s + 25250}
+\end{equation}
+
+\begin{equation}
+    H_{step_response}(t) = \frac{1}{s * }\frac{25250}{s^5 + 118s^4 + 218s^3 + 2036s^2 + 9085s + 25250}
+\end{equation}
+
+%Methodology
+\section*{Methodology}
+ \begin{enumerate}
+    \item Plot the transfer function from the pre-lab.
+    \item Plot the step response of the transfer function from the pre-lab.
+    \item Use the scipy.signal.residue to find the partial fraction decomposition (PFD) result for the pre-lab equation.
+    \item Look at the "residue" results and determine what they mean.
+    \item Next, use those results to help derive a Cosine Function.
+    \item Use the cosine function to plot equation 3.
+    \item Verify the cosine function with the step.response() function. Once again for equation 3.
+    \item Make sure to print the outputs of the residue function to the terminal.
+ \end{enumerate}
+
+%Results
+\section*{Results}
+
+\begin{figure}[H]
+\caption{Transfer Equation}
+\centering
+\includegraphics[width=.8\textwidth]{transfer_func.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Step Response}
+\centering
+\includegraphics[width=.8\textwidth]{step_response.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Cosine Method}
+\centering
+\includegraphics[width=.8\textwidth]{cosine_method.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Cosine Method sig.response}
+\centering
+\includegraphics[width=.8\textwidth]{sig_response_cosine.png}
+\end{figure}
+
+Below is the code for the cosine method developed in this lab.
+
+\begin{lstlisting}
+def cos_method(r,p,t):
+    y = 0
+    
+    for i in range(len(r)):
+        alpha = np.real(p[i]) # poles
+        omega = np.imag(p[i])
+        
+        k_mag = np.abs(r[i]) #res
+        k_rad = np.angle(r[i])
+        #k_deg = k_rad*(180/np.pi)
+        
+        y = y + (k_mag*np.exp(alpha*t)*np.cos(omega*t + k_rad))*u(t) #Also, the factor of 2 accounts for both terms in a complex conjugate pair.
+
+    return y
+\end{lstlisting}
+
+For the code above it took a bit to derive it. With the help of classmates we were able to determine what it was.
+The cos\textunderscore method function takes in the residues, poles, and t. Alpha is just the real part of the poles and omega is the imaginary part. It was tricky because we needed a loop to iterate through all the poles.
+
+\\
+Figure 1 is the transfer function from the pre-lab. It was easy to plot since the code was in the previous lab. Figure 2 is the step response of the transfer function. It was plotted the same way as the transfer function. Figure 3 is the cosine method function plot. We took equation 3 and did PFD in order to plot it. Figure 4 is just the step response of equation 3 buy using the sig.response function.
+
+%Questions
+\section*{Questions}
+\begin{enumerate}
+   \item For a non-complex pole-residue term, you can still use the cosine method, explain why this
+works.
+    \begin{enumerate}
+        \item It still works because we broke up the problem into real and imaginary parts. For non-complex pole-residue terms we will only use the real part aka "alpha".
+    \end{enumerate}
+    \item Leave any feedback on the clarity of the expectations, instructions, and deliverables.
+\end{enumerate}
+
+%Conclusion
+\section*{Conclusion}
+Another great lab! What I am taking away from this is that any problem can be broken down into byte size problems for a computer. I just need to become better at picturing what the instructions look like in python. Lastly, I can use what I am learning in lab to do my homework!
+
+
+%Appendix
+\section*{Appendix}
+
+\end{document}
