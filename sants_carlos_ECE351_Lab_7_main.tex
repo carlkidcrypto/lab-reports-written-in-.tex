@@ -1,0 +1,232 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 7                     %
+% 03/24/2020                %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+
+%Info for Title Page
+\title{ECE 351 Lab 7 Report \\ Section 52}
+\date{March 24, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+%Introduction
+\section{Introduction}
+This lab is meant for us to become familiar with Laplace-domain block diagrams. Especially being able to find both open-loop and closed-loop response of the system.
+
+%Equations
+\section{Equations}
+
+    \begin{equation}
+        G(s) = \frac{s+9}{(s^2 - 6s - 16)(s+4)}
+    \end{equation}
+    
+    \begin{equation}
+        A(s) = \frac{s+4}{s^2 + 4s + 3}
+    \end{equation}
+    
+    \begin{equation}
+       B(s) = s^2 + 26s + 168 
+    \end{equation}
+    
+    Open-loop:
+    \begin{equation}
+        H(s) = A(s) * G(s)
+    \end{equation}
+    
+    Closed-loop:
+    \begin{equation}
+        H(s) = G(s)A(s) / 1 + G(s)B(s)s
+    \end{equation}
+
+
+%Methodology
+\section{Methodology}
+
+First of this lab was successful I got all the code to work properly.
+\begin{enumerate}
+    \item The first thing I did was to represent each equation in python. I used the following code for all three equations. I modified it a bit accordinaly to each equation. For equation 3 we only had a numerator.: 
+        \begin{lstlisting}
+            # Equation G(s) Transfer Function
+            Gnum = [1,9] # numerator
+            Gden = [1,-2,-40,-64] # denomerator
+        \end{lstlisting}
+    \item Next, I verified each equations poles and zeros. To do that I used a special scipy.signal function called tf2zpk(). This function can be used like this:
+    \begin{lstlisting}
+        # Equation G(s) Transfer Function
+        rG,pG,kG = sig.tf2zpk(Gnum,Gden)
+    \end{lstlisting} It will return 3 array items.
+    \item After finding the poles the next thing I did was to find the open-loop and closed-loop transfer functions for the system. An open-loop transfer function is the shortest path from X(s) to Y(s) not including any feedback loops. A closed-loop transfer function is the path from X(s) to Y(s) including feedback loops. (See Figure 3, Equation 4 and 5).
+    \item Lastly, I plotted the closed-loop and open-loop functions using the pyplot python library from matplotlib.
+    
+\end{enumerate}
+
+%Results
+\section{Results}
+
+\begin{figure}[H]
+\caption{Closed-loop Response}
+\centering
+\includegraphics[width=.8\textwidth]{closed_loop_response.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Open-loop Response}
+\centering
+\includegraphics[width=.8\textwidth]{open_loop_response.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Block Diagram for lab 7}
+\centering
+\includegraphics[width=.8\textwidth]{block_diagram_for_lab_7.png}
+\end{figure}
+
+Code for non-proper functions:
+\begin{lstlisting}
+# Equation B(s)
+rB = np.roots(Bnum)
+print('Equation B(s)')
+print('rB:',rB)
+print('\n')
+\end{lstlisting}
+
+\begin{enumerate}
+    \item Section 3.3.4: Considering the expression found in Task 3, is the open-loop response stable? Explain why
+or why not?
+    
+    \begin{enumerate}
+        \item No, it is not stable. We can look at the graph and see that it shoots off into infinity as "t" approaches 2. We also know it's not stable because the denominator contains negative values.
+    \end{enumerate}
+    
+    \item  Section 3.3.6: Does your result from Task 5 support your answer from Task 4? Explain how?
+    \begin{enumerate}
+        \item Yes, it does. Because if we graph the convolution we see it shooting off into infinity as "t" approaches 2.
+    \end{enumerate}
+    \item Section 4.3.3: Using the closed-loop transfer function from Task 1, is the closed-loop response stable?
+Explain why or why not>
+    \begin{enumerate}
+        \item Yes, it is stable. I can tell because it has all positive denominator values. I also see that from the plot.
+    \end{enumerate}
+    
+    \item Section 4.3.5: Does your result from Task 4 support your answer from Task 3? Explain how?
+    \begin{enumerate}
+        \item It does support it. We can see by graphing the convolution that the system becomes stable as "t" approaches 2. It appears to begin to level off.
+    \end{enumerate}
+    
+\end{enumerate}
+
+
+%Questions
+\section{Questions}
+ \begin{enumerate}
+     \item In Part 1 Task 5, why does convolving the factored terms using scipy.signal.convolve()
+result in the expanded form of the numerator and denominator? Would this work with your
+user-defined convolution function from Lab 3? Why or why not?
+
+    \begin{enumerate}
+        \item Convolving results in the expanded form of the neumerator and denominator because we are essentially multiplying two functions together. Thus result usually in a higher order equation. I don't think this would work with my user-defined function from lab 3. If I recall right it was designed to convolve ramp and step functions.
+    \end{enumerate}
+
+    \item Discuss the difference between the open-loop and closed-loop systems from Part 1 and Part 2.
+How does stability differ for each case, and why?
+
+    \begin{enumerate}
+        \item An open-loop function is the transfer function without any corrections from the system. Thus most the time it is unstable. The closed-loop functions is the transfer function with corrections otherwise known as feedback loops included. The feedback loops help stabilize the system.
+    \end{enumerate}
+    
+    \item What is the difference between scipy.signal.residue() used in Lab 6 and
+scipy.signal.tf2zpk() used in this lab?
+
+    \begin{enumerate}
+        \item The residue() function can handle repeated roots and the tf2zpk() function can't. The tf2zpk() function also can't handle 0's to well.
+    \end{enumerate}
+    
+    \item Is it possible for an open-loop system to be stable? What about for a closed-loop system to
+be unstable? Explain how or how not for each.
+
+    \begin{enumerate}
+        \item Yes it is possible for an open-loop system to be stable. The example I can think of is a car driving down a highway. As soon as the gas peddle is let off it will come to a stop eventually without any correction or feedback. It is also possible for a closed-loop system to become unstable due to over correction from feedback loops. An example would be the same car doing down the highway but this time we slam on the brakes hard causing the car to stop quicker and probably not in a safe way. The brake system (feedback loop) plus the friction will cause the car to come to a stop but will increase the chances of it ending badly.
+    \end{enumerate}
+    
+    \item Leave any feedback on the clarity/usefulness of the purpose, deliverables, and expectations
+for this lab.
+
+    \begin{enumerate}
+        \item N/A. This lab went well.
+    \end{enumerate}
+
+ \end{enumerate}
+
+%Conclusion
+\section{Conclusion}
+
+
+%Appendix
+\section{Appendix}
+
+\end{document}
