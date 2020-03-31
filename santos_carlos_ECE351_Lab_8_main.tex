@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 8                     %
+% 03/31/2020                %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+%Info for Title Page
+\title{ECE 351 Lab 8 Report \\ Section 52}
+\date{March 31, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+\maketitle
+\tableofcontents
+
+
+%Introduction
+\section{Introduction}
+The purpose of this lab was to use Fourier Series to approximate time-domain signals.
+
+%Equations
+\section{Equations}
+
+\begin{equation}
+    x(t) = \frac{1}{2}a_0 + \sum_{n=1}^{\infty} a_k cos(kw_0 t) + b_k sin(kw_0 t)
+\end{equation}
+
+Where the following is know:
+\begin{equation}
+     a_k = \frac{2}{T} \int_{0}^{T} x(t)cos(k\omega _0 t) dt
+\end{equation}
+
+\begin{equation}
+    b_k = \frac{2}{T} \int_{0}^{T} x(t)sin(k\omega _0 t) dt
+\end{equation}
+
+and
+
+\begin{equation}
+    \omega _0 = \frac{2 \pi}{T}
+\end{equation}
+
+\begin{figure}[H]
+\caption{Square Wave}
+\centering
+\includegraphics[width=.8\textwidth]{Square_Wave.png}
+\end{figure}
+
+%Methodology
+\section{Methodology}
+This lab was a pretty straight forward lab. I took the following steps for this lab:
+\begin{enumerate}
+    \item First, I turned equations 2 and 3 into a python function.
+    \item Then I turned equation 1 into a python function.
+    \item I then used the function I just defined to find ${a_0,a_1,b_1,b_2,b_3}$
+    \item My next step was to plot the Fourier Series Approximation for a set a values where N=1,3,15,50,150,1500.
+    \item Lastly, I made sure that my plots had two subplots of three items each.
+\end{enumerate}
+
+%Results
+\section{Results}
+
+\begin{figure}[H]
+\caption{Fourier Series Approximation}
+\centering
+\includegraphics[width=.8\textwidth]{F_Ser_Approx_1.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Fourier Series Approximation}
+\centering
+\includegraphics[width=.8\textwidth]{F_Ser_Approx_2.png}
+\end{figure}
+
+This is the code I used to calculate the Fourier Series Approximations. This function takes in three parameters.  Those parameters are: n is the number of times for the summation, t is the time, T is the integral limits.
+\begin{lstlisting}
+def Fourier_approx(n,t,T):
+    x=0
+    for i in range(1,n+1):
+        x = x + b(i)*np.sin(i*(2*np.pi/T)*t)
+    return x
+\end{lstlisting}
+
+One small challenge faced was the divide by zero error. Python spits an error out that says, "Invalid value encountered in true\textunderscore divide". I wasn't able to fix it, but the program still ran and plotted what was expected.
+
+%Questions
+\section{Questions}
+\begin{enumerate}
+    \item Is x(t) an even or an odd function? Explain why?
+    \begin{enumerate}
+        \item x(t) is an even function because it is symmetric about the y-axis. This means we can fold the graph in half and it would overlap perfectly.
+    \end{enumerate}
+    \item Based on your results from Task 1, what do you expect the values of a2, a3, . . . , an to be?
+Why?
+    \begin{enumerate}
+        \item I expect the rest of the values to be 0 as well a\textunderscore k does not contribute the the approximation. The only one that does is b\textunderscore k.
+    \end{enumerate}
+    \item How does the approximation of the square wave change as the value of N increases? In what
+way does the Fourier series struggle to approximate the square wave?
+    \begin{enumerate}
+        \item As N is higher it starts to resemble the square wave more. We can see that by looking at the plots. The Fourier series struggles to capture the top and bottom parts of the square wave. The top being 1 and the bottom being -1.
+    \end{enumerate}
+    \item What is occurring mathematically in the Fourier series summation as the value of N increases?
+    \begin{enumerate}
+        \item As the value of N increases the Fourier series is adding more and more cosine and sine waves together to reach an approximation of a square wave. That means that when N is 1500 it has added together a total of 1500 cosine and sine terms together.
+    \end{enumerate}
+    \item Leave any feedback on the clarity of lab tasks, expectations, and deliverables.
+    \begin{enumerate}
+        \item N/A
+    \end{enumerate}
+\end{enumerate}
+
+
+%Conclusion
+\section{Conclusion}
+In summary, this was a straight forward lab. It helped me visualize what we tend to do by hand in class. The python code executed and provided the results I needed. For future labs, I'll need to avoid the divide by zero error.
+
+%Appendix
+\section{Appendix}
+Attached you'll find the console output.
+\end{document}
