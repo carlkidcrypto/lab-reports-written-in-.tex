@@ -1,0 +1,232 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 9                     %
+% 04/07/2020                %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+%Info for Title Page
+\title{ECE 351 Lab 9 Report \\ Section 52}
+\date{April 7, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+\maketitle
+\tableofcontents
+
+
+%Introduction
+\section{Introduction}
+The purpose of this lab is to become familiar with fast Fourier transforms using python.
+
+%Equations
+\section{Equations}
+
+\begin{equation}
+    f_1(t) = cos(2\pi t) 
+\end{equation}
+from $0 \leq t \leq	2s$ with a sampling frequency of 100.
+
+\begin{equation}
+    f_2(t) = 5*sin(2\pi t) 
+\end{equation}
+from $0 \leq t \leq	2s$ with a sampling frequency of 100.
+
+\begin{equation}
+    f_3(t) = 2*cos((2\pi *2t)-2) + sin^2((2\pi * 6t)+3) 
+\end{equation}
+from $0 \leq t \leq	2s$ with a sampling frequency of 100.
+
+\begin{figure}[H]
+\caption{Lab 8 Equation}
+\centering
+\includegraphics[width=.8\textwidth]{Square_Wave.png}
+\end{figure}
+
+%Methodology
+\section{Methodology}
+\begin{enumerate}
+    \item The first was to create my own Fast Fourier Transform function (fft).  Most of the code was given to use. All I had to do was add a few extra lines of code.
+    \item Now I plotted equation 1 using my fft user defined function that was just created.
+    \item Again, I needed to plot equation 2 using my fft function.
+    \item I used my fft function again to plot equation 3.
+    \item For this step I modified my fft function to block out magnitude elements where $magnitude < 1e-10$ and set X\textunderscore phi to 0.
+    \item lastly, I plotted Lab 8's square wave in figure 1 using my edited fft function.
+\end{enumerate}
+
+%Results
+\section{Results}
+
+The following figures our outputs from the fft user defined functions I made. They each plot the function being transformed. Then they plot the Fourier Transforms magnitude and phase for us.
+
+\begin{figure}[H]
+\caption{$f_1(t)$ Regular function}
+\centering
+\includegraphics[width=.8\textwidth]{f1_plot_1.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{$f_1(t)$ Edited function}
+\centering
+\includegraphics[width=.8\textwidth]{f1_plot_2.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{$f_2(t)$ Regular function}
+\centering
+\includegraphics[width=.8\textwidth]{f2_plot_1.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{$f_2(t)$ Edited function}
+\centering
+\includegraphics[width=.8\textwidth]{f2_plot_2.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{$f_3(t)$ Regular function}
+\centering
+\includegraphics[width=.8\textwidth]{f3_plot_3.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{$f_3(t)$ Edited function}
+\centering
+\includegraphics[width=.8\textwidth]{f3_plot_2.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Lab 8 function: Edited function}
+\centering
+\includegraphics[width=.8\textwidth]{lab_8_eqt_plot.png}
+\end{figure}
+
+
+Regular fft function:
+\begin{lstlisting}
+1. def my_fft(x, fs):
+2.    N = len(x)
+3.    X_fft = fft.fft(x)
+4.    X_fft_shifted = fft.fftshift(X_fft)
+5.    
+6.    freq = np.arange(-N/2,N/2)*fs/N
+7.    
+8.    X_mag = np.abs(X_fft_shifted)/N
+9.    X_phi = np.angle(X_fft_shifted)
+10.   return X_mag, X_phi, freq # return all three items
+\end{lstlisting}
+The above code is my user defined code for the fft function. Line 1 is the function declaration. Lines 2 - 10 is the functions definition. The important part here is the use of the fft.fft(x) function call. That call performs the Fast Fourier transform.
+\\
+\\
+Just below you'll find the modified version accounting for the magnitude and X\textunderscore phi values. To make the edited function all I did was add in a for loop in lines 20 - 22.
+
+Edited fft function:
+\begin{lstlisting}
+11. def my_fft_edited(x,fs):
+12.    N = len(x)
+13.    X_fft = fft.fft(x)
+14.    X_fft_shifted = fft.fftshift(X_fft)
+15.    
+16.    freq = np.arange(-N/2,N/2)*fs/N
+17.    
+18.    X_mag = np.abs(X_fft_shifted)/N
+19.    X_phi = np.angle(X_fft_shifted)
+20.    for i in range(N): # lets loop through it and find what we are looking for
+21.        if (np.abs(X_mag[i]) < 1e-10):
+22.            X_phi[i] = 0
+23.            
+24.    return X_mag, X_phi, freq # return all three items
+\end{lstlisting}
+
+%Questions
+\section{Questions}
+\begin{enumerate}
+    \item What happens if fs is lower? If it is higher? fs in your report must span a few orders of
+magnitude.
+    \begin{enumerate}
+        \item The higher the number the more times we sample the signal. It paints a better picture than a lower number. It also increases computation time.
+        The lower the number the less times we sample and as a result we don't get good results.
+    \end{enumerate}
+    \item What difference does eliminating the small phase magnitudes make?
+    \begin{enumerate}
+        \item It makes a huge difference. It helps us see the values that might actually matter to us. It filters out the phases we don't care about.
+    \end{enumerate}
+    \item . Verify your results from Tasks 1 and 2 using the Fourier transforms of cosine and sine.
+Explain why your results are correct. You will need the transforms in terms of Hz, not rad/s.
+For example, the Fourier transform of cosine (in Hz) is:
+$F \{cos (2π*f_0t)\} = \frac{1}{2}[\delta (f − f_0) + \delta (f + f_0)]$
+    \begin{enumerate}
+        \item It is clear that the transform of a cosine or sine yields delta functions. By looking at the graphs generated by my user defined function I can see that the magnitude and phase are just delta functions at specific frequencies.
+        
+    \end{enumerate}
+    \item Leave any feedback on the clarity of lab tasks, expectations, and deliverables.
+    \begin{enumerate}
+        \item N/A
+    \end{enumerate}
+\end{enumerate}
+
+
+%Conclusion
+\section{Conclusion}
+Comparing this lab 9 to lab 8 it is clear that fast Fourier transforms are a lot faster. Not only does it take less time but it also provides us with the magnitude and phase of the transform. It is especially helpful when all the information is plotted in one plot with multiple subplots. In the end, FFT's are the way to go.
+
+\end{document}
