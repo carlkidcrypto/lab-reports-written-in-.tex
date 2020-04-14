@@ -1,0 +1,183 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Santos             %    
+% ECE 351-51                %
+% Lab 10                    %
+% 04/14/2020                %
+%                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+% Language and font encoding
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{setspace}
+
+
+% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{graphicx} %package to manage images
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Line Spacing
+\setstretch{1.5}
+
+%Info for Title Page
+\title{ECE 351 Lab 10 Report \\ Section 52}
+\date{April 14, 2020}
+\author{Carlos Santos}
+\begin{document}
+
+%Make a Title Page
+\vspace{\fill}
+\maketitle
+\vspace{\fill}
+\clearpage
+
+\maketitle
+\tableofcontents
+
+
+%Introduction
+\section{Introduction}
+This lab's purpose was focused on frequency tools and bode plots using Python.
+%Equations
+\section{Equations}
+
+Transfer Function:
+\begin{equation}
+    H(s) = \frac{\frac{1}{RC}s}{s^2+\frac{1}{RC}s+\frac{1}{LC}}
+\end{equation}
+
+Magnitude:
+\begin{equation}
+    H|j\omega| = \frac{\frac{1}{RC}\omega}{\sqrt{\omega ^ 4 + [\frac{1}{RC}^2 - \frac{2}{LC}]\omega ^ 2}+\frac{1}{LC}^2}
+\end{equation}
+
+Phase:
+\begin{equation}
+    <H(J\omega) = \frac{\pi}{2} - tan^{-1}(\frac{\frac{1}{RC}\omega}{-\omega ^ 2 + \frac{1}{LC}})
+\end{equation}
+
+\begin{equation}
+    x(t) = cos(2\pi*100t) + cos(2\pi*3024t) + sin(2\pi * 50000t)
+\end{equation}
+
+\begin{figure}[H]
+\caption{RLC Circuit}
+\centering
+\includegraphics[width=.8\textwidth]{RLC_Circuit.png}
+\end{figure}
+
+
+%Methodology
+\section{Methodology}
+\begin{enumerate}
+    \item First find the magnitude and phase equations for the transfer function equation.
+    \item Turn the magnitude and phase equations into Python equations.
+    \item Plot the magnitude and phase from $10^3 rad/s \leq \omega \leq 10^6 rad/s$
+    \item Use scipy.signal.bode to plot the magnitude and phase on a Bode plot.
+    \item Plot equation 4 from $0\leq t \leq 0.01s$
+    \item Convert equation 4 into the Z-domian using scipy.signal.bilinear().
+    \item Pass equation 4 through the filer using scipy.signal.lfilter().
+    \item Lasly. plot the output signal y(t)
+\end{enumerate}
+
+%Results
+\section{Results}
+
+
+\begin{figure}[H]
+\caption{Task 3.3.1}
+\centering
+\includegraphics[width=.8\textwidth]{hand_solved.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Task 3.3.2}
+\centering
+\includegraphics[width=.8\textwidth]{sig_bode.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Task 3.3.3}
+\centering
+\includegraphics[width=.8\textwidth]{log_plot.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Task 4.3.4}
+\centering
+\includegraphics[width=.8\textwidth]{signal_filtering.png}
+\end{figure}
+
+
+%Questions
+\section{Questions}
+\begin{enumerate}
+    \item Explain how the filter and filtered output in Part 2 makes sense given the Bode plots from
+Part 1. Discuss how the filter modifies specific frequency bands, in Hz.
+    \begin{enumerate}
+        \item By looking at the Bode plot it seems like our filter is a center-band filter. This means it keeps all the frequencies near the middle and discards the rest. This makes sense by looking at the filtered signal plot versus the unfiltered signal plot. It kept all the signals between -1 and 1. Any high frequency signals are going to be clipped.
+    \end{enumerate}
+    
+
+    \item Discuss the purpose and workings of
+scipy.signal.bilinear() and scipy.signal.lfilter().
+    \begin{enumerate}
+        \item The "bilinear()" function converts our equation over to the Z-domain. It returns two items which are the numerator and denominator. The "lfilter()" passes the signal through the defined filter and provides the output signal which is filtered.
+    \end{enumerate}
+    \item What happens if you use a different sampling frequency in scipy.signal.bilinear() than
+you used for the time-domain signal?
+    \begin{enumerate}
+        \item If sampling frequency is smaller we will get less points on the graph. Likewise the higher the sampling frequency the more points on the graph.
+    \end{enumerate}
+    \item Leave any feedback on the clarity of lab tasks, expectations, and deliverables.
+\end{enumerate}
+    \begin{enumerate}
+        \item N/A 
+    \end{enumerate}
+
+
+%Conclusion
+\section{Conclusion}
+In conclusion Bode plots helps us visualize the characteristics of a filter. Generating those plots in Python proved to be a simple task given the proper libraries and functions. For Bode plots we need sig.bode(), con.TransferFunction(), and con.bode().
+
+
+\end{document}
